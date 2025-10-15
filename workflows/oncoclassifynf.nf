@@ -13,7 +13,6 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_onco
 // MODULE: Installed directly from nf-core/modules
 //
 include { BCFTOOLS_NORM          } from '../modules/nf-core/bcftools/norm'
-include { JVARKIT_VCF2TABLE      } from '../modules/nf-core/jvarkit/vcf2table'
 include { BCFTOOLS_PLUGINFILLTAGS} from '../modules/nf-core/bcftools/pluginfilltags'
 include { VCFANNO                } from '../modules/nf-core/vcfanno'
 
