@@ -167,16 +167,6 @@ workflow ONCOCLASSIFYNF {
     ch_classify = CLASSIFY.out.vcf
 
     //
-    // MODULE: VCF2TABLE
-    //
-    ch_vcf2table = JVARKIT_VCF2TABLE(
-        ch_classify,
-        params.vcf2table_fields
-    )
-    ch_versions = ch_versions.mix(JVARKIT_VCF2TABLE.out.versions)
-    ch_multiqc_files = ch_multiqc_files.mix(ch_vcf2table.out.tsv.collectFile(name: 'vcf2table_mqc.tsv')) 
-
-    //
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
