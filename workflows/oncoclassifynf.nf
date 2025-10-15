@@ -160,7 +160,7 @@ workflow ONCOCLASSIFYNF {
     // MODULE: CLASSIFY
     //
     CLASSIFY(
-        ch_vcf_af.out.vcf,
+        ch_vcf_af,
         Channel.fromPath(params.database_config, checkIfExists: true)
     )
     ch_versions = ch_versions.mix(CLASSIFY.out.versions)
