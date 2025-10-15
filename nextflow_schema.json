@@ -198,6 +198,89 @@
                     "hidden": true
                 }
             }
+        },
+        "annotation": {
+            "title": "Annotation",
+            "type": "object",
+            "description": "Annotation resources",
+            "default": "",
+            "fa_icon": "fas fa-edit",
+            "properties": {
+                "annotation_tools": {
+                    "type": "string",
+                    "default": "snpeff"
+                },
+                "sites_per_chunk": {
+                    "type": "string"
+                },
+                "vep_genome": {
+                    "type": "string"
+                },
+                "vep_species": {
+                    "type": "string"
+                },
+                "vep_cache": {
+                    "type": "string"
+                },
+                "vep_extra_files": {
+                    "type": "string"
+                },
+                "vep_version": {
+                    "type": "integer",
+                    "default": 115
+                },
+                "snpeff_db": {
+                    "type": "string"
+                },
+                "snpeff_cache": {
+                    "type": "string"
+                },
+                "database_config": {
+                    "type": "string"
+                },
+                "vcfanno_toml": {
+                    "type": "string"
+                },
+                "vcfanno_resources": {
+                    "type": "string"
+                },
+                "vcfanno_lua": {
+                    "type": "string"
+                },
+                "vcfanno_extra_resources": {
+                    "type": "string"
+                },
+                "dbnsfp": {
+                    "type": "string"
+                },
+                "dbnsfp_tbi": {
+                    "type": "string"
+                },
+                "spliceai_snv": {
+                    "type": "string"
+                },
+                "spliceai_snv_tbi": {
+                    "type": "string"
+                },
+                "spliceai_indel": {
+                    "type": "string"
+                },
+                "spliceai_indel_tbi": {
+                    "type": "string"
+                },
+                "vcf2table_fields": {
+                    "type": "string"
+                },
+                "bcftools_targets": {
+                    "type": "string"
+                },
+                "bcftools_samples": {
+                    "type": "string"
+                },
+                "bcftools_regions": {
+                    "type": "string"
+                }
+            }
         }
     },
     "allOf": [
@@ -212,6 +295,9 @@
         },
         {
             "$ref": "#/$defs/generic_options"
+        },
+        {
+            "$ref": "#/$defs/annotation"
         }
     ]
 }

@@ -115,7 +115,7 @@ workflow ONCOCLASSIFYNF {
         ch_vep_cache,
         vep_extra_files,
         params.snpeff_db,
-        ch_snpeff_cache ,
+        ch_snpeff_cache,
         params.annotation_tools,
         params.sites_per_chunk
     )
