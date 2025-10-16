@@ -1,0 +1,45 @@
+Changes in component 'nf-core/bcftools/pluginfilltags'
+'modules/nf-core/bcftools/pluginfilltags/environment.yml' is unchanged
+Changes in 'bcftools/pluginfilltags/main.nf':
+--- modules/nf-core/bcftools/pluginfilltags/main.nf
++++ modules/nf-core/bcftools/pluginfilltags/main.nf
+@@ -14,9 +14,9 @@
+     path(samples)
+ 
+     output:
+-    tuple val(meta), path("*.{vcf,vcf.gz,bcf,bcf.gz}"), emit: vcf
+-    tuple val(meta), path("*.tbi")                    , emit: tbi, optional: true
+-    tuple val(meta), path("*.csi")                    , emit: csi, optional: true
++    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}"), emit: vcf
++    tuple val(meta), path("*.vartype.tbi")                    , emit: tbi, optional: true
++    tuple val(meta), path("*.vartype.csi")                    , emit: csi, optional: true
+     path "versions.yml"                               , emit: versions
+ 
+     when:
+@@ -41,7 +41,7 @@
+ 
+     """
+     bcftools +fill-tags \\
+-        --output ${prefix}.${extension} \\
++        --output ${prefix}.vartype.${extension} \\
+         ${regions_file} \\
+         ${targets_file} \\
+         ${args} \\
+@@ -70,9 +70,9 @@
+                     args.contains("--write-index")     || args.contains("-W") ? "csi" :
+                     ""
+     def create_cmd   = extension.endsWith(".gz") ? "echo '' | gzip >" : "touch"
+-    def create_index = extension.endsWith(".gz") && stub_index.matches("csi|tbi") ? "touch ${prefix}.${extension}.${stub_index}" : ""
++    def create_index = extension.endsWith(".gz") && stub_index.matches("csi|tbi") ? "touch ${prefix}.vartype.${extension}.${stub_index}" : ""
+     """
+-    ${create_cmd} ${prefix}.${extension}
++    ${create_cmd} ${prefix}.vartype.${extension}
+     ${create_index}
+ 
+     cat <<-END_VERSIONS > versions.yml
+
+'modules/nf-core/bcftools/pluginfilltags/meta.yml' is unchanged
+'modules/nf-core/bcftools/pluginfilltags/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/bcftools/pluginfilltags/tests/main.nf.test' is unchanged
+'modules/nf-core/bcftools/pluginfilltags/tests/nextflow.config' is unchanged
+************************************************************
