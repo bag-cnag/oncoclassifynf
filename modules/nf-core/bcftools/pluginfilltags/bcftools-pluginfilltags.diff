@@ -16,7 +16,13 @@ Changes in 'bcftools/pluginfilltags/main.nf':
      path "versions.yml"                               , emit: versions
  
      when:
-@@ -41,7 +41,7 @@
+@@ -35,13 +35,10 @@
+                     args.contains("--output-type v") || args.contains("-Ov") ? "vcf" :
+                     "vcf.gz"
+ 
+-    input.collect{
+-        assert it.name != "${prefix}.${extension}" : "Input and output names are the same, set prefix in module configuration to disambiguate!"
+-    }
  
      """
      bcftools +fill-tags \\
@@ -25,7 +31,7 @@ Changes in 'bcftools/pluginfilltags/main.nf':
          ${regions_file} \\
          ${targets_file} \\
          ${args} \\
-@@ -70,9 +70,9 @@
+@@ -70,9 +67,9 @@
                      args.contains("--write-index")     || args.contains("-W") ? "csi" :
                      ""
      def create_cmd   = extension.endsWith(".gz") ? "echo '' | gzip >" : "touch"
