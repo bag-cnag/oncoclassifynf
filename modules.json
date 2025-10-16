@@ -8,62 +8,88 @@
                     "bcftools/concat": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
-                        "installed_by": ["vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "bcftools/norm": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "bcftools/pluginfilltags": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "bcftools/pluginscatter": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
-                        "installed_by": ["vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "bcftools/sort": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
-                        "installed_by": ["vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
                         "git_sha": "0567eee9276d4a358e5f9f01c810a149fbd241f8",
-                        "installed_by": ["vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "multiqc": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "snpeff/snpeff": {
                         "branch": "master",
                         "git_sha": "b966311b31f51b65e87f124d08f948fec019787d",
-                        "installed_by": ["vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "tabix/bgzip": {
                         "branch": "master",
                         "git_sha": "f2cfcf9d3f6a2d123e6c44aefa788aa232204a7a",
-                        "installed_by": ["vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "tabix/bgziptabix": {
                         "branch": "master",
                         "git_sha": "f2cfcf9d3f6a2d123e6c44aefa788aa232204a7a",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "tabix/tabix": {
                         "branch": "master",
                         "git_sha": "f2cfcf9d3f6a2d123e6c44aefa788aa232204a7a",
-                        "installed_by": ["modules", "vcf_annotate_ensemblvep_snpeff"]
+                        "installed_by": [
+                            "modules",
+                            "vcf_annotate_ensemblvep_snpeff"
+                        ]
                     },
                     "vcfanno": {
                         "branch": "master",
                         "git_sha": "15e7f217661be7e332950289735bd790079873fe",
-                        "installed_by": ["modules"]
+                        "installed_by": [
+                            "modules"
+                        ],
+                        "patch": "modules/nf-core/vcfanno/vcfanno.diff"
                     }
                 }
             },
@@ -72,22 +98,30 @@
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "c2b22d85f30a706a3073387f30380704fcae013b",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "utils_nfcore_pipeline": {
                         "branch": "master",
                         "git_sha": "51ae5406a030d4da1e49e4dab49756844fdd6c7a",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "utils_nfschema_plugin": {
                         "branch": "master",
                         "git_sha": "2fd2cd6d0e7b273747f32e465fdc6bcc3ae0814e",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     },
                     "vcf_annotate_ensemblvep_snpeff": {
                         "branch": "master",
                         "git_sha": "b966311b31f51b65e87f124d08f948fec019787d",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     }
                 }
             }

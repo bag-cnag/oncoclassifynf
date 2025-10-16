@@ -14,8 +14,8 @@ process VCFANNO {
     path resources
 
     output:
-    tuple val(meta), path("*.vcf.gz")       , emit: vcf
-    tuple val(meta), path("*.vcf.gz.tbi")   , emit: tbi
+    tuple val(meta), path("*.vcfanno.vcf.gz")       , emit: vcf
+    tuple val(meta), path("*.vcfanno.vcf.gz.tbi")   , emit: tbi
     path "versions.yml"                     , emit: versions
 
     when:
@@ -35,8 +35,8 @@ process VCFANNO {
         ${toml} \\
         ${vcf} \\
         | bgzip ${args2} --threads ${task.cpus} \\
-        > ${prefix}.vcf.gz \\
-        && tabix ${args3} ${prefix}.vcf.gz
+        > ${prefix}.vcfanno.vcf.gz \\
+        && tabix ${args3} ${prefix}.vcfanno.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -47,8 +47,8 @@ process VCFANNO {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    echo "" | gzip > ${prefix}.vcf.gz
-    touch ${prefix}.vcf.gz.tbi
+    echo "" | gzip > ${prefix}.vcfanno.vcf.gz
+    touch ${prefix}.vcfanno.vcf.gz.tbi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

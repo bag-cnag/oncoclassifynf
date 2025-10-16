@@ -1,0 +1,44 @@
+Changes in component 'nf-core/vcfanno'
+'modules/nf-core/vcfanno/environment.yml' is unchanged
+Changes in 'vcfanno/main.nf':
+--- modules/nf-core/vcfanno/main.nf
++++ modules/nf-core/vcfanno/main.nf
+@@ -14,8 +14,8 @@
+     path resources
+ 
+     output:
+-    tuple val(meta), path("*.vcf.gz")       , emit: vcf
+-    tuple val(meta), path("*.vcf.gz.tbi")   , emit: tbi
++    tuple val(meta), path("*.vcfanno.vcf.gz")       , emit: vcf
++    tuple val(meta), path("*.vcfanno.vcf.gz.tbi")   , emit: tbi
+     path "versions.yml"                     , emit: versions
+ 
+     when:
+@@ -35,8 +35,8 @@
+         ${toml} \\
+         ${vcf} \\
+         | bgzip ${args2} --threads ${task.cpus} \\
+-        > ${prefix}.vcf.gz \\
+-        && tabix ${args3} ${prefix}.vcf.gz
++        > ${prefix}.vcfanno.vcf.gz \\
++        && tabix ${args3} ${prefix}.vcfanno.vcf.gz
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+@@ -47,8 +47,8 @@
+     stub:
+     def prefix = task.ext.prefix ?: "${meta.id}"
+     """
+-    echo "" | gzip > ${prefix}.vcf.gz
+-    touch ${prefix}.vcf.gz.tbi
++    echo "" | gzip > ${prefix}.vcfanno.vcf.gz
++    touch ${prefix}.vcfanno.vcf.gz.tbi
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+
+'modules/nf-core/vcfanno/meta.yml' is unchanged
+'modules/nf-core/vcfanno/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/vcfanno/tests/main.nf.test' is unchanged
+'modules/nf-core/vcfanno/tests/nextflow.config' is unchanged
+************************************************************
