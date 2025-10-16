@@ -53,8 +53,8 @@ workflow ONCOCLASSIFYNF {
     ch_vcfanno_resources        = params.vcfanno_resources                  ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                             : Channel.value([])
 
-    ch_vep_cache = params.vep_cache ? Channel.fromPath(params.vep_cache) : Channel.value([])
-    ch_snpeff_cache = params.snpeff_cache ? Channel.fromPath(params.snpeff_cache) : Channel.value([])
+    ch_vep_cache    = params.vep_cache    ? Channel.fromPath(params.vep_cache).collect()    : Channel.value([])
+    ch_snpeff_cache = params.snpeff_cache ? Channel.fromPath(params.snpeff_cache).collect() : Channel.value([])
 
 
     ch_bcftools_regions = params.bcftools_regions ? Channel.fromPath(params.bcftools_regions) : Channel.value([])
