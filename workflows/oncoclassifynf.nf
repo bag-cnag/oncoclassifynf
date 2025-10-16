@@ -96,7 +96,7 @@ workflow ONCOCLASSIFYNF {
     )
 
     ch_versions = ch_versions.mix(BCFTOOLS_NORM.out.versions)
-    ch_vcf_norm = BCFTOOLS_NORM.out.vcf
+    ch_norm_vcf = BCFTOOLS_NORM.out.vcf
         .join(BCFTOOLS_NORM.out.tbi)
 	.map{meta,vcf,tbi -> [meta,vcf,tbi,[]]}
 
@@ -104,7 +104,7 @@ workflow ONCOCLASSIFYNF {
     // SUBWORKFLOW: VCF_ANNOTATE_ENSEMBLVEP_SNPEFF
     //
     VCF_ANNOTATE_ENSEMBLVEP_SNPEFF(
-        ch_vcf_norm,
+        ch_norm_vcf,
         ch_genome_fasta,
         params.vep_genome,
         params.vep_species,
@@ -118,7 +118,22 @@ workflow ONCOCLASSIFYNF {
     )
 
     ch_versions = ch_versions.mix(VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.versions)
-    ch_in_vcfanno = VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.vcf_tbi
+    ch_ann_vcf = VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.vcf_tbi
+
+    //TODO: add bcftools pullin filltags for adding the varType
+    //
+    // MODULE: VARTYPE
+    //
+    VARTYPE(
+        ch_ann_vcf,
+        ch_bcftools_regions,
+        ch_bcftools_targets,
+        ch_bcftools_samples
+        
+    )
+    ch_versions = ch_versions.mix(VARTYPE.out.versions)
+    ch_vartype_vcf = VARTYPE.out.vcf
+        .join(VARTYPE.out.tbi)
         .combine(ch_vcfanno_extra)
         .map { meta, vcf, tbi, resources -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]}    
 
@@ -127,37 +142,37 @@ workflow ONCOCLASSIFYNF {
     // MODULE: VCFANNO
     //
     VCFANNO(
-        ch_in_vcfanno,
+        ch_vartype_vcf,
         ch_vcfanno_toml,
         ch_vcfanno_lua,
         ch_vcfanno_resources
     )
 
     ch_versions = ch_versions.mix(VCFANNO.out.versions)
-    ch_vcfanno = VCFANNO.out.vcf
+    ch_calculate_af = VCFANNO.out.vcf
         .join(VCFANNO.out.tbi)
         .map { 
             meta, vcf, tbi -> [meta, vcf, tbi, [] ] 
             }
 
     //
-    // MODULE: BCFTOOLS_FILLTAGS
+    // MODULE: CALCULATE_AF
     //
-    BCFTOOLS_PLUGINFILLTAGS(
-        ch_vcfanno,
+    CALCULATE_AF(
+        ch_calculate_af,
         ch_bcftools_regions,
         ch_bcftools_targets,
         ch_bcftools_samples
         
     )
-    ch_versions = ch_versions.mix(BCFTOOLS_PLUGINFILLTAGS.out.versions)
-    ch_vcf_af = BCFTOOLS_PLUGINFILLTAGS.out.vcf
+    ch_versions = ch_versions.mix(CALCULATE_AF.out.versions)
+    ch_af_vcf = CALCULATE_AF.out.vcf
 
     //
     // MODULE: CLASSIFY
     //
     CLASSIFY(
-        ch_vcf_af,
+        ch_af_vcf,
         Channel.fromPath(params.database_config, checkIfExists: true)
     )
     ch_versions = ch_versions.mix(CLASSIFY.out.versions)
