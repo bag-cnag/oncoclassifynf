@@ -23,7 +23,7 @@ process BCFTOOLS_PLUGINFILLTAGS {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args   ?: '--output-type z'
+    def args   = task.ext.args   ?: ''
     def args2  = task.ext.args2  ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def regions_file = regions ? "--regions-file ${regions}" : ""

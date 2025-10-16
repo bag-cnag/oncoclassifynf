@@ -3,7 +3,7 @@ Changes in component 'nf-core/bcftools/pluginfilltags'
 Changes in 'bcftools/pluginfilltags/main.nf':
 --- modules/nf-core/bcftools/pluginfilltags/main.nf
 +++ modules/nf-core/bcftools/pluginfilltags/main.nf
-@@ -14,16 +14,16 @@
+@@ -14,9 +14,9 @@
      path(samples)
  
      output:
@@ -16,14 +16,6 @@ Changes in 'bcftools/pluginfilltags/main.nf':
      path "versions.yml"                               , emit: versions
  
      when:
-     task.ext.when == null || task.ext.when
- 
-     script:
--    def args   = task.ext.args   ?: ''
-+    def args   = task.ext.args   ?: '--output-type z'
-     def args2  = task.ext.args2  ?: ''
-     def prefix = task.ext.prefix ?: "${meta.id}"
-     def regions_file = regions ? "--regions-file ${regions}" : ""
 @@ -35,13 +35,10 @@
                      args.contains("--output-type v") || args.contains("-Ov") ? "vcf" :
                      "vcf.gz"
