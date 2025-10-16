@@ -13,7 +13,8 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_onco
 // MODULE: Installed directly from nf-core/modules
 //
 include { BCFTOOLS_NORM          } from '../modules/nf-core/bcftools/norm'
-include { BCFTOOLS_PLUGINFILLTAGS} from '../modules/nf-core/bcftools/pluginfilltags'
+include { BCFTOOLS_PLUGINFILLTAGS as CALCULATE_AF} from '../modules/nf-core/bcftools/pluginfilltags'
+include { BCFTOOLS_PLUGINFILLTAGS as VARTYPE} from '../modules/nf-core/bcftools/pluginfilltags'
 include { VCFANNO                } from '../modules/nf-core/vcfanno'
 
 //
@@ -120,7 +121,6 @@ workflow ONCOCLASSIFYNF {
     ch_versions = ch_versions.mix(VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.versions)
     ch_ann_vcf = VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.vcf_tbi
 
-    //TODO: add bcftools pullin filltags for adding the varType
     //
     // MODULE: VARTYPE
     //
@@ -177,6 +177,8 @@ workflow ONCOCLASSIFYNF {
     )
     ch_versions = ch_versions.mix(CLASSIFY.out.versions)
     ch_classify = CLASSIFY.out.vcf
+
+    //TODO: add bcftools filter for getting only PASS variants
 
     //
     // Collate and save software versions
