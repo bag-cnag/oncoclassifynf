@@ -98,9 +98,7 @@ workflow ONCOCLASSIFYNF {
     ch_versions = ch_versions.mix(BCFTOOLS_NORM.out.versions)
     ch_vcf_norm = BCFTOOLS_NORM.out.vcf
         .join(BCFTOOLS_NORM.out.tbi)
-        .map { 
-            meta, vcf, tbi -> [meta, vcf, tbi] 
-        }
+	.map{meta,vcf,tbi -> [meta,vcf,tbi,[]]}
 
     //
     // SUBWORKFLOW: VCF_ANNOTATE_ENSEMBLVEP_SNPEFF
@@ -139,7 +137,7 @@ workflow ONCOCLASSIFYNF {
     ch_vcfanno = VCFANNO.out.vcf
         .join(VCFANNO.out.tbi)
         .map { 
-            meta, vcf, tbi -> [meta, vcf, tbi] 
+            meta, vcf, tbi -> [meta, vcf, tbi, [] ] 
             }
 
     //
