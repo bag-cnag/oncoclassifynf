@@ -35,9 +35,6 @@ process BCFTOOLS_PLUGINFILLTAGS {
                     args.contains("--output-type v") || args.contains("-Ov") ? "vcf" :
                     "vcf.gz"
 
-    input.collect{
-        assert it.name != "${prefix}.${extension}" : "Input and output names are the same, set prefix in module configuration to disambiguate!"
-    }
 
     """
     bcftools +fill-tags \\
