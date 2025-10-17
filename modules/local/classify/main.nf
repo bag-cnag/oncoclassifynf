@@ -9,11 +9,11 @@ process CLASSIFY {
         'biocontainers/YOUR-TOOL-HERE' }"
 
     input:
-    tuple val(meta), path(vcf)
+    tuple val(meta), path(vcf) , path(index)
     path database_config
 
     output:
-    tuple val(meta), path("*.vcf"), emit: vcf
+    tuple val(meta), path("*.classify.vcf"), emit: vcf
     path "versions.yml"           , emit: versions
 
     when:
@@ -27,7 +27,7 @@ process CLASSIFY {
    python /OncoClassify/OncoClassify.py \\
         $args \\
         -i ${vcf} \\
-        -o ${prefix} \\
+        -o ${prefix}.classify \\
         -d ${database_config}
 
 
@@ -43,8 +43,8 @@ process CLASSIFY {
 
     """
     echo $args
-    
-    touch ${prefix}.vcf
+
+    touch ${prefix}.classify.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

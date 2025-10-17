@@ -169,6 +169,11 @@ workflow ONCOCLASSIFYNF {
     )
     ch_versions = ch_versions.mix(CALCULATE_AF.out.versions)
     ch_af_vcf = CALCULATE_AF.out.vcf
+        .join(CALCULATE_AF.out.tbi)
+        .map {
+            meta, vcf, tbi ->
+                [meta, vcf, tbi]
+        }
 
     //
     // MODULE: CLASSIFY
