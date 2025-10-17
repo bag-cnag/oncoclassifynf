@@ -120,6 +120,8 @@ workflow ONCOCLASSIFYNF {
         params.sites_per_chunk
     )
     ch_versions = ch_versions.mix(VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.versions)
+    ch_multiqc_files = ch_multiqc_files.mix(VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.snpeff_reports).ifEmpty([])
+    ch_multiqc_files = ch_multiqc_files.mix(VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.vep_reports).ifEmpty([])
     ch_ann_vcf = VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.vcf_tbi
 
     //
