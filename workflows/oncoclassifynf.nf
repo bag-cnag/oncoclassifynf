@@ -12,16 +12,16 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_onco
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { BCFTOOLS_NORM          } from '../modules/nf-core/bcftools/norm'
-include { BCFTOOLS_PLUGINFILLTAGS as CALCULATE_AF} from '../modules/nf-core/bcftools/pluginfilltags'
-include { BCFTOOLS_PLUGINFILLTAGS as VARTYPE} from '../modules/nf-core/bcftools/pluginfilltags'
-include { VCFANNO                } from '../modules/nf-core/vcfanno'
+include { BCFTOOLS_NORM                           } from '../modules/nf-core/bcftools/norm'
+include { BCFTOOLS_PLUGINFILLTAGS as CALCULATE_AF } from '../modules/nf-core/bcftools/pluginfilltags'
+include { BCFTOOLS_PLUGINFILLTAGS as VARTYPE      } from '../modules/nf-core/bcftools/pluginfilltags'
+include { VCFANNO                                 } from '../modules/nf-core/vcfanno'
 
 //
 // SUBWORKFLOW: Installed directly from nf-core/subworkflows
 //
 include { VCF_ANNOTATE_ENSEMBLVEP_SNPEFF } from '../subworkflows/nf-core/vcf_annotate_ensemblvep_snpeff/main'
-include { PREPARE_REFERENCES    } from '../subworkflows/local/prepare_references'
+include { PREPARE_REFERENCES             } from '../subworkflows/local/prepare_references'
 //
 // MODULE: Custom local module
 //
@@ -39,28 +39,28 @@ workflow ONCOCLASSIFYNF {
     ch_samplesheet // channel: samplesheet read in from --input
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions      = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
     // Prepare channels from params
-    ch_genome_fasta = Channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
+    ch_genome_fasta              = Channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
 
-    ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? Channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
-                                                                : Channel.empty()
-    ch_vcfanno_lua              = params.vcfanno_lua                        ? Channel.fromPath(params.vcfanno_lua).collect()
+    ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources           ? Channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
+                                                                            : Channel.empty()
+    ch_vcfanno_lua               = params.vcfanno_lua                       ? Channel.fromPath(params.vcfanno_lua).collect()
                                                                             : Channel.value([])
-    ch_vcfanno_toml             = params.vcfanno_toml                       ? Channel.fromPath(params.vcfanno_toml).collect()
+    ch_vcfanno_toml              = params.vcfanno_toml                      ? Channel.fromPath(params.vcfanno_toml).collect()
                                                                             : Channel.value([])
-    ch_vcfanno_resources        = params.vcfanno_resources                  ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
+    ch_vcfanno_resources         = params.vcfanno_resources                 ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                             : Channel.value([])
 
-    ch_vep_cache    = params.vep_cache    ? Channel.fromPath(params.vep_cache).map { it -> [[id:it.baseName], it] }.collect()    : Channel.empty()
-    ch_snpeff_cache = params.snpeff_cache ? Channel.fromPath(params.snpeff_cache).map { it -> [[id:it.baseName], it] }.collect() : Channel.empty()
+    ch_vep_cache                  = params.vep_cache                        ? Channel.fromPath(params.vep_cache).map { it -> [[id:it.baseName], it] }.collect()    : Channel.empty()
+    ch_snpeff_cache               = params.snpeff_cache                     ? Channel.fromPath(params.snpeff_cache).map { it -> [[id:it.baseName], it] }.collect() : Channel.empty()
 
 
-    ch_bcftools_regions = params.bcftools_regions ? Channel.fromPath(params.bcftools_regions) : Channel.value([])
-    ch_bcftools_targets = params.bcftools_targets ? Channel.fromPath(params.bcftools_targets) : Channel.value([])
-    ch_bcftools_samples = params.bcftools_samples ? Channel.fromPath(params.bcftools_samples) : Channel.value([])
+    ch_bcftools_regions           = params.bcftools_regions                 ? Channel.fromPath(params.bcftools_regions) : Channel.value([])
+    ch_bcftools_targets           = params.bcftools_targets                 ? Channel.fromPath(params.bcftools_targets) : Channel.value([])
+    ch_bcftools_samples           = params.bcftools_samples                 ? Channel.fromPath(params.bcftools_samples) : Channel.value([])
 
     // Prepare VEP extra files
 
@@ -95,11 +95,13 @@ workflow ONCOCLASSIFYNF {
     BCFTOOLS_NORM(
         ch_samplesheet,ch_genome_fasta
     )
-
     ch_versions = ch_versions.mix(BCFTOOLS_NORM.out.versions)
     ch_norm_vcf = BCFTOOLS_NORM.out.vcf
         .join(BCFTOOLS_NORM.out.tbi)
-	.map{meta,vcf,tbi -> [meta,vcf,tbi,[]]}
+	    .map{
+            meta,vcf,tbi ->
+                [meta,vcf,tbi,[]]
+        }
 
     //
     // SUBWORKFLOW: VCF_ANNOTATE_ENSEMBLVEP_SNPEFF
@@ -117,7 +119,6 @@ workflow ONCOCLASSIFYNF {
         params.annotation_tools,
         params.sites_per_chunk
     )
-
     ch_versions = ch_versions.mix(VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.versions)
     ch_ann_vcf = VCF_ANNOTATE_ENSEMBLVEP_SNPEFF.out.vcf_tbi
 
@@ -129,13 +130,15 @@ workflow ONCOCLASSIFYNF {
         ch_bcftools_regions,
         ch_bcftools_targets,
         ch_bcftools_samples
-        
     )
     ch_versions = ch_versions.mix(VARTYPE.out.versions)
     ch_vartype_vcf = VARTYPE.out.vcf
         .join(VARTYPE.out.tbi)
         .combine(ch_vcfanno_extra)
-        .map { meta, vcf, tbi, resources -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]}    
+        .map {
+            meta, vcf, tbi, resources ->
+                return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]
+        }
 
 
     //
@@ -147,13 +150,13 @@ workflow ONCOCLASSIFYNF {
         ch_vcfanno_lua,
         ch_vcfanno_resources
     )
-
     ch_versions = ch_versions.mix(VCFANNO.out.versions)
     ch_calculate_af = VCFANNO.out.vcf
         .join(VCFANNO.out.tbi)
-        .map { 
-            meta, vcf, tbi -> [meta, vcf, tbi, [] ] 
-            }
+        .map {
+            meta, vcf, tbi ->
+                [meta, vcf, tbi, [] ]
+        }
 
     //
     // MODULE: CALCULATE_AF
@@ -163,7 +166,6 @@ workflow ONCOCLASSIFYNF {
         ch_bcftools_regions,
         ch_bcftools_targets,
         ch_bcftools_samples
-        
     )
     ch_versions = ch_versions.mix(CALCULATE_AF.out.versions)
     ch_af_vcf = CALCULATE_AF.out.vcf
@@ -233,7 +235,7 @@ workflow ONCOCLASSIFYNF {
     )
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    versions            = ch_versions                 // channel: [ path(versions.yml) ]
 
 }
 
