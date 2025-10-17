@@ -14,9 +14,9 @@ process BCFTOOLS_PLUGINFILLTAGS {
     path(samples)
 
     output:
-    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}")                        , emit: vcf
-    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}.tbi")                    , emit: tbi, optional: true
-    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}.csi")                    , emit: csi, optional: true
+    tuple val(meta), path("*.filltags.{vcf,vcf.gz,bcf,bcf.gz}")                        , emit: vcf
+    tuple val(meta), path("*.filltags.{vcf,vcf.gz,bcf,bcf.gz}.tbi")                    , emit: tbi, optional: true
+    tuple val(meta), path("*.filltags.{vcf,vcf.gz,bcf,bcf.gz}.csi")                    , emit: csi, optional: true
     path "versions.yml"                                                               , emit: versions
 
     when:
@@ -38,7 +38,7 @@ process BCFTOOLS_PLUGINFILLTAGS {
 
     """
     bcftools +fill-tags \\
-        --output ${prefix}.vartype.${extension} \\
+        --output ${prefix}.filltags.${extension} \\
         ${regions_file} \\
         ${targets_file} \\
         ${args} \\
@@ -67,9 +67,9 @@ process BCFTOOLS_PLUGINFILLTAGS {
                     args.contains("--write-index")     || args.contains("-W") ? "csi" :
                     ""
     def create_cmd   = extension.endsWith(".gz") ? "echo '' | gzip >" : "touch"
-    def create_index = extension.endsWith(".gz") && stub_index.matches("csi|tbi") ? "touch ${prefix}.vartype.${extension}.${stub_index}" : ""
+    def create_index = extension.endsWith(".gz") && stub_index.matches("csi|tbi") ? "touch ${prefix}.filltags.${extension}.${stub_index}" : ""
     """
-    ${create_cmd} ${prefix}.vartype.${extension}
+    ${create_cmd} ${prefix}.filltags.${extension}
     ${create_index}
 
     cat <<-END_VERSIONS > versions.yml
