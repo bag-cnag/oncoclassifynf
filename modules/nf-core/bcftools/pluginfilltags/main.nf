@@ -14,10 +14,10 @@ process BCFTOOLS_PLUGINFILLTAGS {
     path(samples)
 
     output:
-    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}"), emit: vcf
-    tuple val(meta), path("*.vartype.tbi")                    , emit: tbi, optional: true
-    tuple val(meta), path("*.vartype.csi")                    , emit: csi, optional: true
-    path "versions.yml"                               , emit: versions
+    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}")                        , emit: vcf
+    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}.tbi")                    , emit: tbi, optional: true
+    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}.csi")                    , emit: csi, optional: true
+    path "versions.yml"                                                               , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

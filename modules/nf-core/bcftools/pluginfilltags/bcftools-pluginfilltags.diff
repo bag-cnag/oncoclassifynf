@@ -3,19 +3,21 @@ Changes in component 'nf-core/bcftools/pluginfilltags'
 Changes in 'bcftools/pluginfilltags/main.nf':
 --- modules/nf-core/bcftools/pluginfilltags/main.nf
 +++ modules/nf-core/bcftools/pluginfilltags/main.nf
-@@ -14,9 +14,9 @@
+@@ -14,10 +14,10 @@
      path(samples)
  
      output:
 -    tuple val(meta), path("*.{vcf,vcf.gz,bcf,bcf.gz}"), emit: vcf
 -    tuple val(meta), path("*.tbi")                    , emit: tbi, optional: true
 -    tuple val(meta), path("*.csi")                    , emit: csi, optional: true
-+    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}"), emit: vcf
-+    tuple val(meta), path("*.vartype.tbi")                    , emit: tbi, optional: true
-+    tuple val(meta), path("*.vartype.csi")                    , emit: csi, optional: true
-     path "versions.yml"                               , emit: versions
+-    path "versions.yml"                               , emit: versions
++    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}")                        , emit: vcf
++    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}.tbi")                    , emit: tbi, optional: true
++    tuple val(meta), path("*.vartype.{vcf,vcf.gz,bcf,bcf.gz}.csi")                    , emit: csi, optional: true
++    path "versions.yml"                                                               , emit: versions
  
      when:
+     task.ext.when == null || task.ext.when
 @@ -35,13 +35,10 @@
                      args.contains("--output-type v") || args.contains("-Ov") ? "vcf" :
                      "vcf.gz"
