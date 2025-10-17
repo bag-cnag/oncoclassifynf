@@ -24,7 +24,7 @@ process CLASSIFY {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    python oncoclassify \\
+   python /OncoClassify/OncoClassify.py \\
         $args \\
         -i ${vcf} \\
         -o ${prefix} \\
